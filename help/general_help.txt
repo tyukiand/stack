@@ -1,31 +1,32 @@
 Stack 4.0
  
 ### AVAILABLE COMMANDS
-  help <cmd>          Shows help for specified command, or this text if no arguments are specified.
-  add                 Adds a new subtask. Properties can be specified either interactively or as arguments.
+  help <cmd>          Shows either this text, or help for specified command.
+  add                 Adds a new subtask.as arguments.
   focus <subtask>     Focus on a subtask.
+  blur                Stop focusing on any subtask.
   concrete            Follow the focus-pointers to the most specific subtask.
   push                Adds and immediately focuses on subtask.
   todo                Shows progress and tells what is todo for this task.
-  finish <subtask>    Marks subtask as finished. Marks this task as finished if no subtask is specified.  
-  abandon <substask>  Marks subtask as abandoned. Marks this task as abandoned if no subtask is specified.
+  finish <subtask>    Marks subtask as finished.  
+  abandon <substask>  Marks subtask as abandoned.
 
 ### EXAMPLES
 
 For example, if you want to get extra information about adding new subtasks, 
 you could do the following:
 
-user@host> help add
+>> help add
 
 Here is another example that shows usage of the arguments. 
 Suppose you want to push a new subtask on the stack. 
 First, take a look at the list of available options by typing:
 
-user@host> help push
+>> help push
 
 Now push a new subtask on the stack using the arguments:
 
-user@host> push --value 3.14 --description "Eat a pie" "Pi"
+>> push --value 3.14 --description "Eat a pie" "Pi"
 
 
 ### STRUCTURE

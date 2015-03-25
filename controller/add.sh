@@ -8,13 +8,8 @@
 #
 # Sets a variable `LAST_CREATED_TASK` if successful.
 
-errorColor='\033[0;31m'
-successColor='\033[0;32m'
-askColor='\033[0;37m'
-defaultColor='\033[39m'
-
-# load utility functions that are used to validate the input
 source "${STACK_PATH}/utils/validation.sh"
+source "${STACK_PATH}/utils/colors.sh"
 
 # The variables that must be entered by the user, or parsed from the 
 # arguments.
@@ -46,7 +41,7 @@ then
     then
       subtaskNameValid="true"
     else
-      echo -e "${errorColor}${errMsg}${defaultColor}"
+      echoError "$errMsg"
     fi
   done
 
@@ -65,7 +60,7 @@ then
     then
       valueValid="true"
     else
-      echo -e "${errorColor}${errMsg}${defaultColor}"
+      echoError "$errMsg"
     fi
   done
 
@@ -95,11 +90,11 @@ else
         if [[ ! -z "$errMsg" ]]
         then
           argsValid="false"
-          echo -e "${errorColor}${errMsg}${defaultColor}"
+          echoError "${errMsg}"
         fi
       ;;
       * ) 
-        echo "Unrecognized option: $optionName"
+        echoError "Unrecognized option: $optionName"
         argsValid="false"
       ;;
     esac
@@ -110,7 +105,7 @@ else
   errMsg=$(isValidSubtaskName "$subtaskName")
   if [[ ! -z "$errMsg" ]]
   then
-    echo -e "${errorColor}${errMsg}${defaultColor}"
+    echoError "${errMsg}"
     argsValid="false"
   fi
 fi
@@ -124,9 +119,9 @@ then
   mkdir "$subtaskName"
   cd "$subtaskName" 
   "$STACK_PATH"/persistence/write-task-properties.sh "$subtaskName" "$value" ""
-  touch "description.txt"
-  echo "$description" >> description.txt 
-  echo -e "${successColor}Added new subtask '$subtaskName'${defaultColor}"
+  touch ".description.txt"
+  echo "$description" >> .description.txt 
+  echoSuccess "Added new subtask '$subtaskName'"
   cd ..
 
   # This variable is sourced and exposed by `add-return.sh`

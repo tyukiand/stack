@@ -9,8 +9,10 @@
 # become available in the customized version of shell.
 
 # Set a new prompt
-export PS1="\033[0;32mstack\033[39m:\033[0;96m\w\033[39m> "
+export PS1="\033[0;32mstack\033[39m:\033[0;96m\w\033[39m\n>> "
 export PROMPT_COMMAND=""
+
+source "$STACK_PATH/utils/colors.sh"
 
 # Displays help.
 #
@@ -20,13 +22,40 @@ function help {
   local cmd="$1"
   case "$cmd" in
     "add" )
-      echo "TODO: display add-help here"
+      cat "${STACK_PATH}/help/add_help.txt"
+    ;;
+    "todo" )
+      cat "${STACK_PATH}/help/todo_help.txt"
+    ;;
+    "concrete" )
+      cat "${STACK_PATH}/help/concrete_help.txt"
+    ;;
+    "focus" )
+      cat "${STACK_PATH}/help/focus_help.txt"
+    ;;
+    "blur" )
+      cat "${STACK_PATH}/help/blur_help.txt"
+    ;;
+    "push" )
+      cat "${STACK_PATH}/help/push_help.txt"
+    ;;
+    "finish" )
+      cat "${STACK_PATH}/help/finish_help.txt"
+    ;;
+    "abandon" )
+      cat "${STACK_PATH}/help/abandon_help.txt"
     ;;
     * )
-      cat "$STACK_PATH"/help/general_help.txt
+      cat "${STACK_PATH}/help/general_help.txt"
     ;;
   esac
 }
+
+# Used code generator was:
+# for x in focus blur push finish abandon
+# do   
+#   echo -e "\"${x}\" )\n  cat \"\${STACK_PATH}/help/${x}_help.txt\"\n;;"
+# done
 
 # Adds a new subtask.
 #
@@ -75,8 +104,17 @@ function focus {
       "${STACK_PATH}/persistence/set-focused-subtask.sh" "$subtask"
       concrete
       todo
+    else
+      echoError "The subtask '$subtask' does not exist."
     fi
   fi
+}
+
+# Unsets the focused subtask.
+#
+# After this function is called, no subtask is marked as focused.
+function blur {
+  "${STACK_PATH}/persistence/set-focused-subtask.sh" ""
 }
 
 # Adds a new subtask
@@ -90,5 +128,49 @@ function push {
   then
     focus "$LAST_CREATED_TASK"
     cd "$LAST_CREATED_TASK"
+  fi
+}
+
+# Finishes a subtask
+# 
+# Moves a subtask into a hidden .finished.<task_name> directory
+function finish {
+  if (( $# == 0 )) 
+  then
+    # focus on this task
+    thisTask=$(basename $(pwd))
+    cd ..
+    finish "$thisTask"
+  else
+    # focus on a subtask
+    subtask=$1
+    if [ -d "$subtask" ] 
+    then
+      mv "$subtask" ".finished.${subtask}"
+    else
+      echoError "The subtask '$subtask' does not exist."
+    fi
+  fi
+}
+
+# Abandones a subtask
+# 
+# Moves a subtask into a hidden .finished.<task_name> directory
+function abandon {
+  if (( $# == 0 )) 
+  then
+    # focus on this task
+    thisTask=$(basename $(pwd))
+    cd ..
+    abandon "$thisTask"
+  else
+    # focus on a subtask
+    subtask=$1
+    if [ -d "$subtask" ] 
+    then
+      mv "$subtask" ".abandoned.${subtask}"
+    else
+      echoError "The subtask '$subtask' does not exist."
+    fi
   fi
 }

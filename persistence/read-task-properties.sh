@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Reads task name, value, and focused subtask from a `task_properties.kv`
+# Reads task name, value, and focused subtask from a `.task_properties.kv`
 # file.
 #
 # Sets variables TASK_NAME, TASK_VALUE and FOCUSED_SUBTASK
@@ -9,7 +9,7 @@
 # load functions used for validation
 source "${STACK_PATH}/utils/validation.sh"
 
-if [ -f task_properties.kv ] 
+if [ -f .task_properties.kv ] 
 then
   TASK_NAME=""
   TASK_VALUE="1.0"
@@ -30,8 +30,8 @@ then
         FOCUSED_SUBTASK="$value"
       ;;
     esac
-  done < task_properties.kv
+  done < .task_properties.kv
 else 
   echo "Current directory does not seem to represent a task. "
-  echo "No task_properties.kv found."
+  echo "No .task_properties.kv found."
 fi
