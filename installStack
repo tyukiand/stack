@@ -1,0 +1,20 @@
+#!/bin/bash
+#
+# This scripts installs the Stack 4.0
+#
+# It modifies your ~/.bashrc, so use it only at your own risk.
+
+# create a backup 
+cp ~/.bashrc ~/.bashrc_BACKUP_BY_STACK_4_0
+
+# start modifying the .bashrc
+echo "" >> ~/.bashrc
+echo "# stack 4.0 - START" >> ~/.bashrc
+echo "# You can simply remove all commands between START and END to deactivate the stack 4.0" >> ~/.bashrc
+
+# Add the current directory to the PATH
+echo "export STACK_PATH=$(pwd)" >> ~/.bashrc
+echo "export PATH=\$PATH:$(pwd)" >> ~/.bashrc
+
+# end modifying .bashrc
+echo "# stack 4.0 - END" >> ~/.bashrc

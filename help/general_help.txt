@@ -1,0 +1,47 @@
+Stack 4.0
+ 
+### AVAILABLE COMMANDS
+  help <cmd>          Shows help for specified command, or this text if no arguments are specified.
+  add                 Adds a new subtask. Properties can be specified either interactively or as arguments.
+  focus <subtask>     Focus on a subtask.
+  concrete            Follow the focus-pointers to the most specific subtask.
+  push                Adds and immediately focuses on subtask.
+  todo                Shows progress and tells what is todo for this task.
+  finish <subtask>    Marks subtask as finished. Marks this task as finished if no subtask is specified.  
+  abandon <substask>  Marks subtask as abandoned. Marks this task as abandoned if no subtask is specified.
+
+### EXAMPLES
+
+For example, if you want to get extra information about adding new subtasks, 
+you could do the following:
+
+user@host> help add
+
+Here is another example that shows usage of the arguments. 
+Suppose you want to push a new subtask on the stack. 
+First, take a look at the list of available options by typing:
+
+user@host> help push
+
+Now push a new subtask on the stack using the arguments:
+
+user@host> push --value 3.14 --description "Eat a pie" "Pi"
+
+
+### STRUCTURE
+
+Every subtask is represented by a separate directory that contains a file 
+with key-value pairs, as well as a plain text file with a description.
+Subtasks are represented as subdirectories.
+
+It is possible to simply delete the subtask directories with 'rm' command, 
+or move them around as seems fit.
+
+The description files should be edited with a text editor of your choice.
+
+The key-value files can also be modified manually if you want to change some 
+of the properties of the subtask (e.g. the relative task value), 
+but make sure that these files remain valid.
+
+Finished or abandoned tasks are moved to hidden directories, 
+they can be reactivated by changing the name of directory.
