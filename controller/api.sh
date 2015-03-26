@@ -78,7 +78,7 @@ function todo {
 # Allows the user to quickly go from a high-level goal to the detailed substeps.
 function concrete {
   source "${STACK_PATH}/persistence/get-focused-subtask.sh"
-  if [ ! -z "$FOCUSED_SUBTASK" ]
+  if [ ! -z "$FOCUSED_SUBTASK" ] && [ -d "$FOCUSED_SUBTASK" ]
   then
     cd "$FOCUSED_SUBTASK"
     concrete
@@ -123,11 +123,11 @@ function blur {
 # and changes the directory immediately after
 # creation.
 function push {
-  eval $("${STACK_PATH}/controller/add-return.sh" "$@")
+  LAST_CREATED_TASK=""
+  source "${STACK_PATH}/controller/add.sh" "$@"
   if [[ ! -z "$LAST_CREATED_TASK" ]] 
   then
     focus "$LAST_CREATED_TASK"
-    cd "$LAST_CREATED_TASK"
   fi
 }
 

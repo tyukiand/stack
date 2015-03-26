@@ -11,6 +11,6 @@
 # source `add.sh` here, and print only those variables that
 # make sense in other scripts. These variables can be evaluated
 # using the `eval`.
-source "${STACK_PATH}/stack-add.sh"         # this sets `LAST_CREATED_TASK`,
-                                            # but also tons of other stuff.
-echo "LAST_CREATED_TASK=$LAST_CREATED_TASK" # this exposes `LAST_CREATED_TASK`
+source "${STACK_PATH}/controller/add.sh"      # this sets `LAST_CREATED_TASK`,
+                                              # but also tons of other stuff.
+echo "LAST_CREATED_TASK=$LAST_CREATED_TASK"   # this exposes `LAST_CREATED_TASK`

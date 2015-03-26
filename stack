@@ -1,4 +1,4 @@
 #!/bin/bash
 #
 # Starts a new shell, loads stack commands
-bash --init-file "$STACK_PATH"/controller/api.sh
+bash --init-file "${STACK_PATH}/controller/api.sh"
