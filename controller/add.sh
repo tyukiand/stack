@@ -1,5 +1,17 @@
 #!/bin/bash
 #
+# Defines functions that are used for initialization of new tasks
+
+if [ -z "$STACK_ADD_SOURCED" ]
+then 
+  export STACK_ADD_SOURCED="true"
+else 
+  return
+fi
+
+source "${STACK_PATH}/utils/validation.sh"
+source "${STACK_PATH}/utils/colors.sh"
+
 # Creates a new task. 
 #
 # This includes creating a directory for the task, 
@@ -7,10 +19,6 @@
 # adding a description in a simple text file.
 #
 # Sets a variable `LAST_CREATED_TASK` if successful.
-
-source "${STACK_PATH}/utils/validation.sh"
-source "${STACK_PATH}/utils/colors.sh"
-
 function __add_new_task {
 
   # The variables that must be entered by the user, or parsed from the 
@@ -126,8 +134,7 @@ function __add_new_task {
     # a description file
     mkdir "$subtaskName"
     cd "$subtaskName" 
-    "$STACK_PATH"/persistence/write-task-properties.sh \
-      "$subtaskName" "$value" ""
+    __set_task_properties "$subtaskName" "$value" ""
     touch ".description.txt"
     echo "$description" >> .description.txt 
     echoSuccess "Added new subtask '$subtaskName'"
@@ -137,5 +144,3 @@ function __add_new_task {
     LAST_CREATED_TASK="$subtaskName"
   fi
 }
-
-__add_new_task "$@"

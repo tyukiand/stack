@@ -2,6 +2,13 @@
 #
 # Contains functions used for validation of inputs and file content
 
+if [ -z "$STACK_VALIDATION_SOURCED" ]
+then
+  export STACK_VALIDATION_SOURCED="true"
+else
+  return
+fi
+
 # Checks whether a subtask name is valid
 #
 # Returns empty string if the name is valid, and if no subtask with this name

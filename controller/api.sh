@@ -8,11 +8,23 @@
 # so that all the commands like `help`, `add`, `push` etc.
 # become available in the customized version of shell.
 
+if [ -z "$STACK_API_SOURCED" ] 
+then
+  export STACK_API_SOURCED="true"
+else
+  return
+fi
+
+source "${STACK_PATH}/utils/colors.sh"
+source "${STACK_PATH}/controller/add.sh"
+source "${STACK_PATH}/controller/help.sh"
+source "${STACK_PATH}/view/todo.sh"
+source "${STACK_PATH}/persistence/focused-subtask.sh"
+source "${STACK_PATH}/persistence/task-properties.sh"
+
 # Set a new prompt
 export PS1="\033[0;32mstack\033[39m:\033[0;96m\w\033[39m\n>> "
 export PROMPT_COMMAND=""
-
-source "$STACK_PATH/utils/colors.sh"
 
 # Displays help.
 #
@@ -20,35 +32,7 @@ source "$STACK_PATH/utils/colors.sh"
 # help. Otherwise displays general help.
 function help {
   local cmd="$1"
-  case "$cmd" in
-    "add" )
-      cat "${STACK_PATH}/help/add_help.txt"
-    ;;
-    "todo" )
-      cat "${STACK_PATH}/help/todo_help.txt"
-    ;;
-    "concrete" )
-      cat "${STACK_PATH}/help/concrete_help.txt"
-    ;;
-    "focus" )
-      cat "${STACK_PATH}/help/focus_help.txt"
-    ;;
-    "blur" )
-      cat "${STACK_PATH}/help/blur_help.txt"
-    ;;
-    "push" )
-      cat "${STACK_PATH}/help/push_help.txt"
-    ;;
-    "finish" )
-      cat "${STACK_PATH}/help/finish_help.txt"
-    ;;
-    "abandon" )
-      cat "${STACK_PATH}/help/abandon_help.txt"
-    ;;
-    * )
-      cat "${STACK_PATH}/help/general_help.txt"
-    ;;
-  esac
+  __show_help "$cmd"
 }
 
 # Used code generator was:
@@ -62,7 +46,7 @@ function help {
 # Can be used either in interactive mode or with arguments.
 # See implementation of `stack-add` for more details.
 function add {
-  "${STACK_PATH}/controller/add.sh" "$@"
+   __add_new_task "$@"
 }
 
 # Displays what is todo for the current task
@@ -70,15 +54,15 @@ function add {
 # Shows the parent tasks that lead to this task, some progress information,
 # and the active subtasks
 function todo {
-  "${STACK_PATH}/view/todo.sh" "$@"
+  __show_todo "$@"
 }
 
 # Follows the `FOCUSED_SUBTASK` pointer as far as possible
 #
 # Allows the user to quickly go from a high-level goal to the detailed substeps.
 function concrete {
-  source "${STACK_PATH}/persistence/get-focused-subtask.sh"
-  if [ ! -z "$FOCUSED_SUBTASK" ] && [ -d "$FOCUSED_SUBTASK" ]
+  local FOCUSED_SUBTASK=$(__get_focused_subtask)
+  if [ -d "$FOCUSED_SUBTASK" ]
   then
     cd "$FOCUSED_SUBTASK"
     concrete
@@ -101,7 +85,7 @@ function focus {
     subtask=$1
     if [ -d "$subtask" ] 
     then
-      "${STACK_PATH}/persistence/set-focused-subtask.sh" "$subtask"
+      __set_focused_subtask "$subtask"
       concrete
       todo
     else
@@ -114,7 +98,7 @@ function focus {
 #
 # After this function is called, no subtask is marked as focused.
 function blur {
-  "${STACK_PATH}/persistence/set-focused-subtask.sh" ""
+  __set_focused_subtask ""
 }
 
 # Adds a new subtask
@@ -124,7 +108,7 @@ function blur {
 # creation.
 function push {
   LAST_CREATED_TASK=""
-  source "${STACK_PATH}/controller/add.sh" "$@"
+  __add_new_task "$@"
   if [[ ! -z "$LAST_CREATED_TASK" ]] 
   then
     focus "$LAST_CREATED_TASK"

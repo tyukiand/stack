@@ -2,7 +2,16 @@
 #
 # Printing breadcrumb/stack-trace-like representations of task hierarchies
 
+if [ -z "$STACK_TRACE_SOURCED" ]
+then
+  export STACK_TRACE_SOURCED="true"
+else
+  return
+fi
+
 source "${STACK_PATH}/utils/colors.sh"
+source "${STACK_PATH}/persistence/task-properties.sh"
+source "${STACK_PATH}/persistence/task-description.sh"
 
 # Writes an indented single-line description of a task
 #
@@ -12,12 +21,23 @@ source "${STACK_PATH}/utils/colors.sh"
 function __describeIndented {
   local directory="$1"
   local indentation="$2"
-  if [ -f "$directory/.tast_properties.kv" ] # TODO: replace by "isTask" or sth.
+  if [[ $(__is_task "$directory") == "true" ]]
   then 
     cd "$directory"
-    source "${STACK_PATH}/persistence/read-task-properties.sh"
-    echo "${indentation}${TASK_NAME} " # (Value: $TASK_VALUE)"
-    cd -
+    __get_task_properties
+    local prefix="${indentation}${TASK_NAME}                                   "
+    prefix=${prefix:0:28}
+    local shortDescr="$(__get_short_description)"
+    local suffix=""
+    if (( ${#shortDescr} + ${#prefix} > 76 ))
+    then
+      suffix="${shortDescr:0:$(( 74 - ${#prefix} ))}..."
+    else
+      suffix="$shortDescr"
+    fi
+    local line="$prefix [${suffix}]"
+    echo "$line"
+    cd - > /dev/null
   else 
     echoError "The directory $directory does not seem to be a valid task."
   fi
@@ -37,9 +57,9 @@ function __stackTrace {
   local currentDir=$1
   local indentationAcc=$2
   local parentDir=$(dirname $currentDir)
-  if [ -f "$currentDir/.task_properties.kv" ]
+  if [[ $(__is_task "$currentDir") == "true" ]]
   then
-    describeIndented "$currentDir" "$indentationAcc"
-    stackTrace "$parentDir" "  $indentationAcc"
+    __describeIndented "$currentDir" "$indentationAcc"
+    __stackTrace "$parentDir" " $indentationAcc"
   fi
 }
