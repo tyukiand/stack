@@ -1,0 +1,14 @@
+The `todo` command displays progress information about the current task.
+
+It displays the task name and overall progress.
+
+Then it shows the stack trace: a kind of bread-crumb that shows why we
+are doing this task. The more general predecessor tasks are further down in
+the list.
+
+In the subtasks-section it shows a list of subtasks, together with their
+progress and short description. The focused subtask is marked by an arrow.
+
+Finally, the `todo` command displays the full description of the current task.
+The description is stored in the hidden file `.description.txt`,
+and can be edited by any text editor.

@@ -1,0 +1,11 @@
+The `concrete` command attempts to follow the focus-pointers down 
+the task hierarchy tree, until it finds the most concrete subtask. 
+
+Arriving at the most concrete subtask, it prints the todos for this subtask.
+
+The syntax is:
+
+>> concrete
+
+The idea is that one can use the focus-pointers for jumping from a general
+super-task to a very concrete little subtask.

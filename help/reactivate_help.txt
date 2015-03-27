@@ -1,0 +1,14 @@
+The `reactivate` command can be used to reactivate a 
+previously finished or abandoned subtask.
+
+The syntax is:
+
+>> reactivate <subtaskName>
+
+The subtask then becomes active again.
+
+This command can also be used without any arguments:
+
+>> reactivate
+
+reactivates the current task.

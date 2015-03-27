@@ -28,7 +28,7 @@ _______________________________  Stack trace  __________________________________
     echo -e "${headerColor}
 _________________________________  Subtasks   __________________________________
   ${defaultColor}"
-  
+    local PARENT_FOCUS=$(__get_focused_subtask)
     # ls -1
     for SUBGOAL_FULLPATH in $(find . -maxdepth 1 -type d | grep "^\./.*")
     do
@@ -52,8 +52,14 @@ _________________________________  Subtasks   __________________________________
         local BAR_STR="$(
           __progress_bar $(__calculate_progress) 23 "$DONE_COLOR" "$TODO_COLOR"
         )"
-        local HEAD_STR="$BAR_STR ${LINE_COLOR}($TASK_VALUE) $TASK_NAME"
-        local HEAD_LENGTH=${#HEAD_STR}
+        local HEAD_STR="$BAR_STR"
+        if [[ "$SUBGOAL" == "$PARENT_FOCUS" ]]
+        then
+          HEAD_STR="${HEAD_STR} \033[01;93m->"
+        fi
+        HEAD_STR="$HEAD_STR ${LINE_COLOR}($TASK_VALUE) $TASK_NAME"
+        local COLORLESS_HEAD=$(echo -e "$HEAD_STR" | tr -d [:cntrl:])
+        local HEAD_LENGTH=${#COLORLESS_HEAD}
 
         # tail string length calculation is somewhat weird due
         # to colored prompt in the moment... 
@@ -63,7 +69,7 @@ _________________________________  Subtasks   __________________________________
         then
           TAIL_LENGTH=0
         fi
-        DESCRIPTION=$( head -n 1 .description.txt ) # TODO: move to persistence
+        DESCRIPTION=$( __get_short_description )
         
         if (( ${#DESCRIPTION} < TAIL_LENGTH ))
         then

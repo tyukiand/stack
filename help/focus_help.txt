@@ -1,0 +1,24 @@
+The `focus` command is used to focus on a subtask.
+
+It sets the focus-pointer of the current task on the selected subtask.
+
+The syntax is:
+
+>> focus <nameOfTheFocusedSubtask>
+
+The parameter should be plain name of an existing 
+subtask (child directory), longer paths are not 
+supported. Trailing "/" is ignored.
+
+If no argument is specified, that is, if one just calls:
+
+>> focus
+
+then it is equivalent to changing to the parent task,
+then focusing on the current task,
+then changing back to the current task.
+
+Focused subtasks are marked by an arrow `->` in the todo-list.
+
+To follow the focus-pointers down the task hierarchy, use `concrete` command.
+To unset the focus-pointer of the current task, use the `blur` command.

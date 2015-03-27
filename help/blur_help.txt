@@ -1,0 +1,10 @@
+The `blur` command removes the focus-pointer in the current task.
+
+It can be used to prevent the `concrete` command from going too 
+far down the task hierarchy tree.
+
+The syntax is simply:
+
+>> blur
+
+It accepts no arguments.

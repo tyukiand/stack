@@ -1,15 +1,16 @@
 Stack 4.0
  
 ### AVAILABLE COMMANDS
-  help <cmd>          Shows either this text, or help for specified command.
-  add                 Adds a new subtask.as arguments.
-  focus <subtask>     Focus on a subtask.
-  blur                Stop focusing on any subtask.
-  concrete            Follow the focus-pointers to the most specific subtask.
-  push                Adds and immediately focuses on subtask.
-  todo                Shows progress and tells what is todo for this task.
-  finish <subtask>    Marks subtask as finished.  
-  abandon <substask>  Marks subtask as abandoned.
+  help <cmd>            Shows either this text, or help for specified command.
+  add                   Adds a new subtask.as arguments.
+  push                  Adds and immediately focuses on subtask.
+  focus <subtask>       Focus on a subtask.
+  blur                  Stop focusing on any subtask.
+  concrete              Follow the focus-pointers to the most specific subtask.
+  todo                  Shows progress and tells what is todo for this task.
+  finish <subtask>      Marks subtask as finished.  
+  abandon <substask>    Marks subtask as abandoned.
+  reactivate <subtask>  Reactivates previously finished or abandoned task.
 
 ### EXAMPLES
 
@@ -45,4 +46,4 @@ of the properties of the subtask (e.g. the relative task value),
 but make sure that these files remain valid.
 
 Finished or abandoned tasks are moved to hidden directories, 
-they can be reactivated by changing the name of directory.
+they are not deleted, and can be reactivated later.

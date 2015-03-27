@@ -21,6 +21,7 @@ source "${STACK_PATH}/controller/help.sh"
 source "${STACK_PATH}/view/todo.sh"
 source "${STACK_PATH}/persistence/focused-subtask.sh"
 source "${STACK_PATH}/persistence/task-properties.sh"
+source "${STACK_PATH}/controller/autocomplete.sh"
 
 # Set a new prompt
 export PS1="\033[0;32mstack\033[39m:\033[0;96m\w\033[39m\n>> "
@@ -34,6 +35,8 @@ function help {
   local cmd="$1"
   __show_help "$cmd"
 }
+
+complete -F __identify_command help
 
 # Used code generator was:
 # for x in focus blur push finish abandon
@@ -49,6 +52,8 @@ function add {
    __add_new_task "$@"
 }
 
+complete -F __addpush_autocomplete add
+
 # Displays what is todo for the current task
 #
 # Shows the parent tasks that lead to this task, some progress information,
@@ -56,6 +61,8 @@ function add {
 function todo {
   __show_todo "$@"
 }
+
+complete -F __trivial_autocomplete todo
 
 # Follows the `FOCUSED_SUBTASK` pointer as far as possible
 #
@@ -66,8 +73,12 @@ function concrete {
   then
     cd "$FOCUSED_SUBTASK"
     concrete
+  else
+    todo
   fi
 }
+
+complete -F __trivial_autocomplete concrete
 
 # Focuses on a subtask.
 #
@@ -80,19 +91,20 @@ function focus {
     thisTask=$(basename $(pwd))
     cd ..
     focus "$thisTask"
+    cd "$thisTask"
   else
     # focus on a subtask
     subtask=$1
     if [ -d "$subtask" ] 
     then
       __set_focused_subtask "$subtask"
-      concrete
-      todo
     else
       echoError "The subtask '$subtask' does not exist."
     fi
   fi
 }
+
+complete -F __propose_active_subtasks focus
 
 # Unsets the focused subtask.
 #
@@ -100,6 +112,8 @@ function focus {
 function blur {
   __set_focused_subtask ""
 }
+
+complete -F __trivial_autocomplete blur
 
 # Adds a new subtask
 #
@@ -114,6 +128,8 @@ function push {
     focus "$LAST_CREATED_TASK"
   fi
 }
+
+complete -F __addpush_autocomplete push
 
 # Finishes a subtask
 # 
@@ -137,6 +153,8 @@ function finish {
   fi
 }
 
+complete -F __propose_active_subtasks finish
+
 # Abandones a subtask
 # 
 # Moves a subtask into a hidden .finished.<task_name> directory
@@ -158,3 +176,30 @@ function abandon {
     fi
   fi
 }
+
+complete -F __propose_active_subtasks abandon
+
+# Reactivates a finished or abandoned subtask
+function reactivate {
+  if (( $# == 0 )) 
+  then
+    # reactivate on this task
+    thisTask=$(basename $(pwd))
+    cd ..
+    reactivate "$thisTask"
+  else
+    # reactivate a subtask
+    subtask=$1
+    if [ -d ".finished.$subtask" ]
+    then
+      mv ".finished.$subtask" "${subtask}"
+    elif [ -d ".abandoned.$subtask" ]
+    then
+      mv ".abandoned.$subtask" "${subtask}"
+    else
+      echoError "The subtask '$subtask' does not exist."
+    fi
+  fi
+}
+
+complete -F __propose_inactive_subtasks reactivate

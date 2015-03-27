@@ -1,4 +1,11 @@
 #!/bin/bash
 #
-# Starts a new shell, loads stack commands
-bash --init-file "${STACK_PATH}/controller/api.sh"
+# Starts a customized stack-bash, or executes single command.
+if (( $# > 0 ))
+then 
+  # run and exit
+  bash --init-file "${STACK_PATH}/controller/api.sh" -c "$@"
+else
+  # start a new shell, load stack commands
+  bash --init-file "${STACK_PATH}/controller/api.sh"
+fi

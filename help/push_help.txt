@@ -1,0 +1,66 @@
+The `push` command is essentially the same as the `add` command 
+followed by a `focus` command.
+
+Just like `add`, the `push` is also used to create new subtasks, 
+but additionally, the freshly created subtask is focused immediately.
+
+A subtask is represented by a directory that contains hidden text files
+`.task-properties.kv` and `.description.txt`.
+
+The `.description.txt` file can be edited manually later, it stores the
+description. 
+The first line of this file is used in stack traces and todo-lists.
+
+The `.task-properties.kv` can also be adjusted manually, albeit carefully.
+
+### Interactive mode ##################
+
+Just like `add`, the `push` command can be used in interactive mode,
+
+>> push
+
+starts a dialog where the user can specify the name
+of new subtask, it's relative value, and a short
+description. 
+
+
+### Arguments #########################
+
+Arguments are the same as for `add`.
+
+The syntax is as follows:
+
+>> push --description "My description" --value 0.25 mySubtaskName
+
+It can be written shorter as follows:
+
+>> push -d "My description" -v 0.25 mySubtaskName
+
+Notice that the subtask name can consist only of
+symbols 'a'-'z', 'A'-'Z', '0'-'9' and the underscore '_'.
+
+Almost all arguments can be omitted.
+If the `-d` option is omitted, then the 
+description is set to empty string. 
+The description can later be modified manually by editing
+the hidden `.description.txt` file in the directory that
+corresponds to the task.
+
+If the `-v` option is omitted, then the relative value 
+is set to 1.0.
+
+### Examples ##########################
+
+Add a new task called "myNewTask" without description and with value 1.0,
+focus it, and move to the `myNewTask` directory immediately:
+
+>> push myNewTask 
+
+Push a new task called "Pi" with description "Eat a pie" and value 3.14:
+
+>> push --description "Eat a pie" --value 3.14 Pi
+
+Same as above, but using shorter syntax:
+
+>> push -d "Eat a pie" -v 3.14 Pi
+

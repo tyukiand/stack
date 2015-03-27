@@ -1,0 +1,17 @@
+The `finish` command can be used to mark a subtask as finished.
+
+The syntax is:
+
+>> finish <subtaskName>
+
+The subtask is then marked as 100% complete, the corresponding directory is
+moved to a hidden directory named `.finished.subtaskName`.
+
+This command can also be used without any arguments.
+If one types just:
+
+>> finish
+
+then the current task is marked as finished.
+
+Finished tasks can be reactivated using the `reactivate` command.

@@ -20,6 +20,6 @@ function __show_help {
   then 
     cat "$filePath"
   else
-    cat "${STACK_PATH}/help/generic_help.txt"
+    cat "${STACK_PATH}/help/general_help.txt"
   fi
 }

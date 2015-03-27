@@ -1,0 +1,18 @@
+The `abandon` command can be used to mark a subtask as
+abandoned.
+
+The syntax is:
+
+>> abandon <subtaskName>
+
+The subtask is then no longer relevant for overall progress computation.
+The corresponding directory is moved to a hidden directory named `.abandoned.subtaskName`.
+
+This command can also be used without any arguments.
+If one types just:
+
+>> abandon
+
+then the current task is marked as abandoned.
+
+Abandoned tasks can be reactivated using the `reactivate` command.
