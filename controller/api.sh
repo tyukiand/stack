@@ -126,6 +126,7 @@ function push {
   if [[ ! -z "$LAST_CREATED_TASK" ]] 
   then
     focus "$LAST_CREATED_TASK"
+    concrete
   fi
 }
 
