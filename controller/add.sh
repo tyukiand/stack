@@ -89,6 +89,7 @@ function __add_new_task {
   else
     # parse new task description from the arguments
   
+    # TAGS: BASH OPTIONS PARSING WHILE CASE ARGUMENTS
     # parse options
     while (( $# != 1 )) 
     do
